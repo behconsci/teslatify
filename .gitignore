@@ -1,0 +1,11 @@
+*.pyc
+*/static/*
+*/media/*
+.idea/*
+.env
+error_log*
+*.log
+.DS_Store
+log/*
+htmlcov/*
+.coverage

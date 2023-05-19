@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <section class="nes-container login_container">
+        <div style="text-align: center">
+            <h3>Enter your Tesla email</h3>
+            <form action="{% url 'tesla_auth' %}" method="post">
+                {% csrf_token %}
+                <div class="nes-field">
+                    <br>
+                    <input type="email" id="name_field" name="email" class="nes-input">
+                </div>
+                <br>
+                <button style="width: 100%" type="submit" class="nes-btn is-primary">Login</button>
+            </form>
+        </div>
+        {% if auth_url %}
+        <div>
+            <h3>Steps: </h3>
+            <ol>
+                <li>
+                    Click on this link:
+                    <a href="{{ auth_url }}" target="_blank">Tesla Authentication</a>
+                </li>
+                <li>
+                    Copy the link from that tab and paste here:
+                    <form action="{% url 'tesla_auth_complete' %}" method="post">
+                        {% csrf_token %}
+                        <div class="nes-field">
+                            <br>
+                            <input type="text" name="auth_url" class="nes-input">
+                            <input type="hidden" name="state" value="{{ state }}">
+                            <input type="hidden" name="code_verifier" value="{{ code_verifier }}">
+                        </div>
+                        <br>
+                        <button style="width: 100%" type="submit" class="nes-btn is-primary">Complete Login</button>
+                    </form>
+                </li>
+            </ol>
+        </div>
+        {% endif %}
+    </section>
+{% endblock %}

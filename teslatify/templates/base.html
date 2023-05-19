@@ -1,0 +1,80 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.98.0">
+    <title>Teslatify - Keep songs you love!</title>
+    <!-- minify -->
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
+    <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet"/>
+    <link href="{% static 'css/style.css' %}?v=2w" rel="stylesheet"/>
+
+    <style>
+        html, body, pre, code, kbd, samp {
+            font-family: "Press Start 2P";
+        }
+        .nes-btn.is-primary {
+            color: #400073!important;
+            background-color: #CBF55C!important;
+        }
+        .nes-btn.is-primary::after {
+            box-shadow: inset -4px -4px #6d862a!important;
+        }
+        .nes-btn.is-primary:hover::after {
+            box-shadow: inset -6px -6px #6d862a!important;
+        }
+    </style>
+</head>
+<body>
+
+<div id="nescss">
+    <header>
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/">
+                    <h2 class="logo-name">Teslatify</h2>
+                </a>
+                <p class="logo-motto">Keep songs you love.</p>
+            </div>
+
+            <div class="social-buttons">
+                {% if request.user.is_authenticated %}
+                    <a href="">
+                        <p>{{ request.user.username }}</p>
+                    </a>
+                {% else %}
+                    <a href=""><p>Sign in/up</p></a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <main class="main-content">
+            {% block main %}{% endblock %}
+        </main>
+    </div>
+
+    <footer class="text-muted py-5">
+        <div class="container">
+            <p class="mb-1 small_font">Keep songs you love</p>
+        </div>
+    </footer>
+
+</div>
+
+
+<script src="{% static 'js/bootstrap.bundle.min.js' %}"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.2.min.js" type="application/javascript"></script>
+{% block extra_js %}{% endblock %}
+
+
+</body>
+</html>
