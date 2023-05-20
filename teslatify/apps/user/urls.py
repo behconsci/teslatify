@@ -1,4 +1,6 @@
 from django.urls import path
+# logout is a built-in view
+from django.contrib.auth.views import LogoutView
 
 from teslatify.apps.user.views import (
     tesla_login,
@@ -12,6 +14,8 @@ from teslatify.apps.user.views import (
 
 urlpatterns = [
     path('login/', tesla_login, name='tesla_login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+
     path('tesla/auth/', tesla_auth, name='tesla_auth'),
     path('tesla/auth/complete/', tesla_auth_complete, name='tesla_auth_complete'),
 

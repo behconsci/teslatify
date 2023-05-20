@@ -2,6 +2,8 @@
 
 {% block main %}
 
+    {% include 'dialogs/spotify_connected.html' %}
+
     <section class="topic">
         <h3>Your Tesla(s): </h3>
     </section>
@@ -24,7 +26,7 @@
                 {% endif %}
                 <br>
                 <button {% if not vehicle.song_title %}class="add-to-spotify nes-btn is-primary is-disabled" disabled{% else %}class="add-to-spotify nes-btn is-primary"{% endif %}>
-                    <input type="hidden" name="spotify_id" value="{{ request.user.spotify_id|default_if_none:'' }}">
+                    <input type="hidden" name="spotify_connected" value="{% if request.user.spotify_refresh_token %}1{% endif %}">
                     <input type="hidden" name="vehicle_id" value="{{ vehicle.vehicle_id }}">
                     <input type="hidden" name="song_title" value="{{ vehicle.song_title }}">
                     <input type="hidden" name="artist_name" value="{{ vehicle.artist_name }}">
@@ -41,24 +43,38 @@
     <script>
         $(document).ready(function () {
 
+            // show small popup when spotify is connected
+            {% if 'spotify_login' in request.GET and request.user.spotify_refresh_token %}
+                document.getElementById('id_spotify_connected').showModal();
+            {% endif %}
+
             // reload page every 2 minutes to get the latest data
             setTimeout(function () {
-                location.reload();
+                var url = window.location.href;
+                // check if spotify_login=success is in url, if so, remove it
+                if (url.indexOf('spotify_login=success') > -1) {
+                    url = url.replace('?spotify_login=success', '');
+                }
+                // reload page
+                window.location.href = url;
             }, 120000);
 
             // with click on add-to-spotify button, add song to spotify via ajax
             $('.add-to-spotify').click(function () {
-                var spotify_id = $(this).find('input[name="spotify_id"]').val();
+                var spotify_id = $(this).find('input[name="spotify_connected"]').val();
 
                 // if spotify_id is not set, redirect to spotify login
                 if (!spotify_id) {
-                    console.log('no spotify id');
+                    console.log('no spotify connected');
                     window.location.href = '{% url "spotify_login" %}';
                 }
 
                 var song_title = $(this).find('input[name="song_title"]').val();
                 var artist_name = $(this).find('input[name="artist_name"]').val();
                 var button = $(this);
+                // show processing icon
+                button.text('Processing...');
+
                 $.ajax({
                     url: '{% url "add_to_spotify" %}',
                     type: 'POST',
@@ -69,7 +85,7 @@
                     },
                     success: function (data) {
                         if (data['success']) {
-                            button.html('Added &checkmark;');
+                            button.html('Added <i class="nes-icon is-medium heart"></i>');
                         }
                     }
                 });

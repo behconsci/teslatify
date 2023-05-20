@@ -144,9 +144,20 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=['localhost'])
 
 # spotify client id and secret
 SPOTIFY_TOKEN_URL = 'https://accounts.spotify.com/api/token'
+
 SPOTIFY_CLIENT_ID = env.str('SPOTIFY_CLIENT_ID', default='no_spotify_client_id')
 SPOTIFY_CLIENT_SECRET = env.str('SPOTIFY_CLIENT_SECRET', default='no_spotify_client_secret')
 SPOTIFY_REDIRECT_URI = env.str('SPOTIFY_REDIRECT_URI', default='http://localhost:8000/spotify/callback/')
+
+# same with spotipy
+SPOTIPY_CLIENT_ID = SPOTIFY_CLIENT_ID
+SPOTIPY_CLIENT_SECRET = SPOTIFY_CLIENT_SECRET
+SPOTIPY_REDIRECT_URI = SPOTIFY_REDIRECT_URI
+
