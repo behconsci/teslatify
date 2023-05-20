@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+import sys
 from pathlib import Path
 
 import environ
@@ -161,3 +162,57 @@ SPOTIPY_CLIENT_ID = SPOTIFY_CLIENT_ID
 SPOTIPY_CLIENT_SECRET = SPOTIFY_CLIENT_SECRET
 SPOTIPY_REDIRECT_URI = SPOTIFY_REDIRECT_URI
 
+
+LOGFILE_ROOT = BASE_DIR
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'strm': sys.stdout
+        },
+    },
+    'formatters': {
+        'standard': {
+            'format': "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt': "%d/%b/%Y %H:%M:%S"
+        },
+    },
+    'handlers': {
+        'null': {
+            'class': 'logging.NullHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOGFILE_ROOT, 'error_log'),
+            'maxBytes': 50000000,
+            'backupCount': 2,
+            'formatter': 'standard',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
+        },
+    },
+    'loggers': {
+        'instingo': {
+            'handlers': ['logfile'],
+            'level': 'DEBUG',
+        },
+        'django.request': {
+            'handlers': ['logfile', 'mail_admins'],
+            'level': 'ERROR',
+        },
+        'django.security.DisallowedHost': {
+            'handlers': ['null'],
+            'propagate': False,
+        },
+    }
+}
