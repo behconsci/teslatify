@@ -1,4 +1,4 @@
-from typing import Tuple
+import logging
 from requests_oauthlib import OAuth2Session
 
 import spotify
@@ -13,6 +13,8 @@ from django.conf import settings
 from django.contrib.auth import login
 
 from teslatify.apps.user.models import User
+
+logger = logging.getLogger(__name__)
 
 
 def tesla_login(request):
@@ -93,6 +95,8 @@ def tesla_auth_complete(request):
     state = request.POST.get('state')
     code_verifier = request.POST.get('code_verifier')
     email = request.POST.get('email')
+
+    logger.debug(f'request.POST: {request.POST}')
 
     # call tesla API to get the access token and refresh token
     tesla = teslapy.Tesla(email=email, state=state, code_verifier=code_verifier)
