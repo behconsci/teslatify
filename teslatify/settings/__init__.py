@@ -169,7 +169,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'filters': {
         'console': {
-            'level': 'INFO',
+            'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'strm': sys.stdout
         },
