@@ -162,6 +162,12 @@ SPOTIPY_CLIENT_ID = SPOTIFY_CLIENT_ID
 SPOTIPY_CLIENT_SECRET = SPOTIFY_CLIENT_SECRET
 SPOTIPY_REDIRECT_URI = SPOTIFY_REDIRECT_URI
 
+SPOTIFY_SCOPES = (
+    'playlist-read-private',
+    'playlist-read-collaborative',
+    'playlist-modify-private',
+    'playlist-modify-public'
+)
 
 LOGFILE_ROOT = BASE_DIR
 LOGGING = {

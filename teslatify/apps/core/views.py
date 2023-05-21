@@ -1,10 +1,11 @@
 import teslapy
+import spotipy
 
 from django.shortcuts import render, redirect, reverse
+from django.conf import settings
 
 
 def home(request):
-
     if not request.user.is_authenticated:
         return redirect(reverse('tesla_login'))
 
@@ -34,6 +35,24 @@ def home(request):
         })
 
     tesla.close()
+
+    # check if user's spotify account is connected, then
+    # check if access token is expired, then refresh it.
+    if request.user.spotify_access_token:
+        sp = spotipy.Spotify(auth=request.user.spotify_access_token)
+        try:
+            sp.current_user()
+        except spotipy.exceptions.SpotifyException:
+            # access token is expired
+            spotify_auth_manager = spotipy.oauth2.SpotifyOAuth(
+                client_id=settings.SPOTIFY_CLIENT_ID,
+                client_secret=settings.SPOTIFY_CLIENT_SECRET,
+                redirect_uri=settings.SPOTIFY_REDIRECT_URI,
+                scope=settings.SPOTIFY_SCOPES,
+            )
+            token = spotify_auth_manager.refresh_access_token(request.user.spotify_refresh_token)
+            request.user.spotify_access_token = token['access_token']
+            request.user.save()
 
     return render(request, 'index.html', {
         'vehicle_data': vehicle_data

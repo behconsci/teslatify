@@ -1,5 +1,4 @@
 import logging
-from requests_oauthlib import OAuth2Session
 
 import spotify
 import spotipy
@@ -125,16 +124,10 @@ def tesla_auth_complete(request):
 def spotify_login(request):
     """ it redirects to spotify login page """
 
-    oauth2_scopes = (
-        'playlist-read-private',
-        'playlist-read-collaborative',
-        'playlist-modify-private',
-        'playlist-modify-public'
-    )
     oauth2: spotify.OAuth2 = spotify.OAuth2(
         settings.SPOTIFY_CLIENT_ID,
         settings.SPOTIFY_REDIRECT_URI,
-        scopes=oauth2_scopes,
+        scopes=settings.SPOTIFY_SCOPES,
         state=request.user.email
     )
 
@@ -149,25 +142,15 @@ def spotify_callback(request):
     state = request.GET.get('state')
 
     # call spotify API to get the access token and refresh token
-    oauth2_scopes = (
-        'playlist-read-private',
-        'playlist-read-collaborative',
-        'playlist-modify-private',
-        'playlist-modify-public'
-    )
-    oauth2 = OAuth2Session(
+    oauth2 = spotipy.oauth2.SpotifyOAuth(
         settings.SPOTIFY_CLIENT_ID,
-        scope=oauth2_scopes,
+        scope=settings.SPOTIFY_SCOPES,
         redirect_uri=settings.SPOTIFY_REDIRECT_URI
     )
 
-    token = oauth2.fetch_token(
-        settings.SPOTIFY_TOKEN_URL,
-        client_secret=settings.SPOTIFY_CLIENT_SECRET,
-        code=code
-    )
-    # save the access token and refresh token in the database
+    token = oauth2.get_access_token(code, as_dict=True)
 
+    # save the access token and refresh token in the database
     if not request.user.is_authenticated:
         user = User.objects.get(email=state)
         login(request, user)
@@ -189,9 +172,7 @@ def spotify_callback(request):
 
 @login_required
 def add_to_spotify(request):
-    """
-    Adds a song to the user's spotify playlist. It calls spotify API to add the song.
-    """
+    """ Adds a song to the user's spotify playlist. It calls spotify API to add the song. """
 
     # call spotify API to add the song
     song_title = request.POST.get('song_title')
