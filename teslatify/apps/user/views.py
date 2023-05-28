@@ -207,8 +207,15 @@ def add_to_spotify(request):
     # add the song to the playlist
     song = sp.search(q='artist:' + artist_name + ' track:' + song_title, type='track')
     if song['tracks']['items']:
-        # add only if not already in the playlist
-        sp.playlist_replace_items(teslatify_playlist['id'], [song['tracks']['items'][0]['uri']])
+        song_uri = song['tracks']['items'][0]['uri']
+        # add to playlist only if song is not already in the playlist, by using the song uri
+        # sp.playlist_items(teslatify_playlist['id']) returns a list of songs in the playlist
+        # we check if the song uri is already in the playlist
+        if song_uri not in [item['track']['uri'] for item in sp.playlist_items(teslatify_playlist['id'])['items']]:
+            sp.playlist_add_items(teslatify_playlist['id'], [song_uri])
+    else:
+        # song not found
+        return JsonResponse({'success': False, 'message': 'song not found'}, status=200)
 
     # return json response
     return JsonResponse({'success': True}, status=200)
