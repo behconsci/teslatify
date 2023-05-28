@@ -16,6 +16,17 @@ from teslatify.apps.user.models import User
 logger = logging.getLogger(__name__)
 
 
+@login_required
+def start_trial_page(request):
+    """ it renders the start trial page """
+
+    # if user has active subscription, redirect to home page
+    if request.user.has_active_subscription():
+        return redirect(reverse('home'))
+
+    return render(request, 'start_trial.html')
+
+
 def tesla_login(request):
     """ it only asks for email address """
 
@@ -94,8 +105,6 @@ def tesla_auth_complete(request):
     state = request.POST.get('state')
     code_verifier = request.POST.get('code_verifier')
     email = request.POST.get('email')
-
-    logger.debug(f'request.POST: {request.POST}')
 
     # call tesla API to get the access token and refresh token
     tesla = teslapy.Tesla(email=email, state=state, code_verifier=code_verifier)

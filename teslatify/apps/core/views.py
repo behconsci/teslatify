@@ -9,6 +9,10 @@ def home(request):
     if not request.user.is_authenticated:
         return redirect(reverse('tesla_login'))
 
+    # ask user to subscribe if they don't have active subscription
+    if not request.user.has_active_subscription():
+        return redirect(reverse('start_trial'))
+
     tesla = teslapy.Tesla(request.user.email)
     if not tesla.authorized:
         token = tesla.refresh_token(refresh_token=request.user.tesla_refresh_token)

@@ -12,7 +12,7 @@
     <!-- minify -->
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet"/>
-    <link href="{% static 'css/style.css' %}?v=2w" rel="stylesheet"/>
+    <link href="{% static 'css/style.css' %}?v=2dw" rel="stylesheet"/>
 
     <style>
         html, body, pre, code, kbd, samp {
@@ -29,6 +29,7 @@
             box-shadow: inset -6px -6px #6d862a!important;
         }
     </style>
+    {% block extra_head %}{% endblock %}
 </head>
 <body>
 
@@ -44,11 +45,10 @@
 
             <div class="social-buttons">
                 {% if request.user.is_authenticated %}
-                    <a href="">
-                        <p>{{ request.user.username }}</p>
-                    </a>
+                    <small>{{ request.user.username }}</small> <br>
+                    <small><a href="{% url 'logout' %}">Logout</a></small>
                 {% else %}
-                    <a href=""><p>Sign in/up</p></a>
+                    <a href=""><p>Sign in</p></a>
                 {% endif %}
             </div>
         </div>
@@ -62,7 +62,11 @@
 
     <footer class="text-muted py-5">
         <div class="container">
-            <p class="mb-1 small_font">Keep songs you love</p>
+            <p class="small_font">
+                Sometimes a song plays on the radio and you want to keep it. <br>
+                This is a place to keep songs you love. <br><br>
+                Login with your Tesla, connect your Spotify and keep songs you love. <br>
+            </p>
         </div>
     </footer>
 

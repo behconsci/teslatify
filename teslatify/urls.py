@@ -7,4 +7,5 @@ urlpatterns = [
     path('', home, name='home'),
     path('user/', include('teslatify.apps.user.urls')),
     path('admin/', admin.site.urls),
+    path("stripe/", include("djstripe.urls", namespace="djstripe")),
 ]

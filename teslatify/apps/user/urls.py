@@ -3,6 +3,7 @@ from django.urls import path
 from django.contrib.auth.views import LogoutView
 
 from teslatify.apps.user.views import (
+    start_trial_page,
     tesla_login,
     tesla_auth,
     tesla_auth_complete,
@@ -15,6 +16,8 @@ from teslatify.apps.user.views import (
 urlpatterns = [
     path('login/', tesla_login, name='tesla_login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    # add start_trial_page
+    path('start_trial/', start_trial_page, name='start_trial_page'),
 
     path('tesla/auth/', tesla_auth, name='tesla_auth'),
     path('tesla/auth/complete/', tesla_auth_complete, name='tesla_auth_complete'),

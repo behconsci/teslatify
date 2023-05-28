@@ -52,6 +52,8 @@ INSTALLED_APPS = [
 
     'teslatify.apps.core',
     'teslatify.apps.user',
+
+    'djstripe'
 ]
 
 MIDDLEWARE = [
@@ -161,6 +163,13 @@ SPOTIFY_REDIRECT_URI = env.str('SPOTIFY_REDIRECT_URI', default='http://localhost
 SPOTIPY_CLIENT_ID = SPOTIFY_CLIENT_ID
 SPOTIPY_CLIENT_SECRET = SPOTIFY_CLIENT_SECRET
 SPOTIPY_REDIRECT_URI = SPOTIFY_REDIRECT_URI
+
+STRIPE_LIVE_SECRET_KEY = os.environ.get("STRIPE_LIVE_SECRET_KEY", "<your secret key>")
+STRIPE_TEST_SECRET_KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "<your secret key>")
+STRIPE_LIVE_MODE = False  # Change to True in production
+DJSTRIPE_WEBHOOK_SECRET = "whsec_PfREESst0q22tkEXrXKAoMTsf7rUvEcU"
+DJSTRIPE_USE_NATIVE_JSONFIELD = True  # We recommend setting to True for new installations
+DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
 
 SPOTIFY_SCOPES = (
     'playlist-read-private',
