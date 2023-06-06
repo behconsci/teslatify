@@ -34,7 +34,11 @@ class User(AbstractUser, Base):
         if not customer:
             return False
 
-        return Subscription.objects.filter(customer=customer, status="active").exists()
+        subscription = Subscription.objects.filter(customer=customer).last()
+        if not subscription:
+            return False
+
+        return subscription.status == 'active' or subscription.status == 'trialing'
 
     def __str__(self):
         return self.username
