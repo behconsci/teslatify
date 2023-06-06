@@ -48,7 +48,7 @@ def trial_started_callback(request):
         api_key=settings.STRIPE_TEST_SECRET_KEY
     )
 
-    print(session)
+    logger.debug(session.payment_status)
 
     # if payment is not successful, return error
     if session.payment_status != 'paid':
