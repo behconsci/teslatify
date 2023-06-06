@@ -15,7 +15,8 @@ class User(AbstractUser, Base):
     spotify_refresh_token = models.CharField(max_length=2055, null=True, blank=True)
 
     def has_active_subscription(self):
-        return Subscription.objects.filter(customer__user=self, status="active").exists()
+        customer = Customer.objects.get(subscriber=self)
+        return Subscription.objects.filter(customer=customer, status="active").exists()
 
     def __str__(self):
         return self.username
