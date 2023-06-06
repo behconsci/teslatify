@@ -45,7 +45,7 @@ def trial_started_callback(request):
     # get the session from stripe
     session = stripe.checkout.Session.retrieve(
         session_id,
-        api_key=settings.STRIPE_SECRET_KEY
+        api_key=settings.STRIPE_TEST_SECRET_KEY
     )
 
     print(session)
