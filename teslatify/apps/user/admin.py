@@ -20,6 +20,7 @@ class CustomUserAdmin(UserAdmin):
         'is_active',
         'is_staff',
         'is_superuser',
+        'subscription_status',
         'created_at'
     )
     search_fields = (
