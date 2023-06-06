@@ -3,7 +3,6 @@ import logging
 import spotify
 import spotipy
 import teslapy
-import stripe
 from spotipy.oauth2 import SpotifyClientCredentials
 
 from django.contrib.auth.decorators import login_required
@@ -37,6 +36,10 @@ def trial_started_callback(request):
         return render(request, 'start_trial.html', {
             'error': 'Session ID is required'
         }, status=400)
+
+    # if user already has active subscription, redirect to home page
+    if request.user.has_active_subscription():
+        return redirect(reverse('home'))
 
     # update user's subscription status
     request.user.subscription_status = User.SUBSCRIPTION_STATUS_TRIAL
