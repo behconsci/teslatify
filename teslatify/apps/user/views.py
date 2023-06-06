@@ -32,28 +32,10 @@ def start_trial_page(request):
 def trial_started_callback(request):
     """ it receives a GET request from stripe with "session" parameter """
 
-    # if user has active subscription, redirect to home page
-    if request.user.has_active_subscription():
-        return redirect(reverse('home'))
-
     session_id = request.GET.get('session')
     if not session_id:
         return render(request, 'start_trial.html', {
             'error': 'Session ID is required'
-        }, status=400)
-
-    # get the session from stripe
-    session = stripe.checkout.Session.retrieve(
-        session_id,
-        api_key=settings.STRIPE_TEST_SECRET_KEY
-    )
-
-    logger.debug(session.payment_status)
-
-    # if payment is not successful, return error
-    if session.payment_status != 'paid':
-        return render(request, 'start_trial.html', {
-            'error': 'Payment is not successful'
         }, status=400)
 
     # update user's subscription status
