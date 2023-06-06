@@ -29,9 +29,9 @@ class User(AbstractUser, Base):
     )
 
     def has_active_subscription(self):
-        try:
-            customer = Customer.objects.get(subscriber=self)
-        except Customer.DoesNotExist:
+        # user can't change the email in stripe payment link, so this should be fine.
+        customer = Customer.objects.filter(email=self.email).first()
+        if not customer:
             return False
 
         return Subscription.objects.filter(customer=customer, status="active").exists()
