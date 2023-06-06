@@ -2,8 +2,9 @@ import logging
 
 import spotify
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 import teslapy
+import stripe
+from spotipy.oauth2 import SpotifyClientCredentials
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, reverse
@@ -25,6 +26,38 @@ def start_trial_page(request):
         return redirect(reverse('home'))
 
     return render(request, 'start_trial.html')
+
+
+@login_required
+def trial_started_callback(request):
+    """ it receives a GET request from stripe with "session" parameter """
+
+    # if user has active subscription, redirect to home page
+    if request.user.has_active_subscription():
+        return redirect(reverse('home'))
+
+    session_id = request.GET.get('session')
+    if not session_id:
+        return render(request, 'start_trial.html', {
+            'error': 'Session ID is required'
+        }, status=400)
+
+    # get the session from stripe
+    session = stripe.checkout.Session.retrieve(session_id)
+
+    print(session)
+
+    # if payment is not successful, return error
+    if session.payment_status != 'paid':
+        return render(request, 'start_trial.html', {
+            'error': 'Payment is not successful'
+        }, status=400)
+
+    # update user's subscription status
+    request.user.subscription_status = User.SUBSCRIPTION_STATUS_TRIAL
+    request.user.save()
+
+    return redirect(reverse('home'))
 
 
 def tesla_login(request):

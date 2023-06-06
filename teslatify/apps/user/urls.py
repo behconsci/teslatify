@@ -4,6 +4,7 @@ from django.contrib.auth.views import LogoutView
 
 from teslatify.apps.user.views import (
     start_trial_page,
+    trial_started_callback,
     tesla_login,
     tesla_auth,
     tesla_auth_complete,
@@ -18,6 +19,8 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     # add start_trial_page
     path('start_trial/', start_trial_page, name='start_trial'),
+
+    path('trial-started-callback/', trial_started_callback, name='trial_started_callback'),
 
     path('tesla/auth/', tesla_auth, name='tesla_auth'),
     path('tesla/auth/complete/', tesla_auth_complete, name='tesla_auth_complete'),
