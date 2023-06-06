@@ -17,7 +17,7 @@ urlpatterns = [
     path('login/', tesla_login, name='tesla_login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     # add start_trial_page
-    path('start_trial/', start_trial_page, name='start_trial_page'),
+    path('start_trial/', start_trial_page, name='start_trial'),
 
     path('tesla/auth/', tesla_auth, name='tesla_auth'),
     path('tesla/auth/complete/', tesla_auth_complete, name='tesla_auth_complete'),
