@@ -173,7 +173,8 @@ def spotify_callback(request):
 
     # call spotify API to get the access token and refresh token
     oauth2 = spotipy.oauth2.SpotifyOAuth(
-        settings.SPOTIFY_CLIENT_ID,
+        client_id=settings.SPOTIFY_CLIENT_ID,
+        client_secret=settings.SPOTIFY_CLIENT_SECRET,
         scope=settings.SPOTIFY_SCOPES,
         redirect_uri=settings.SPOTIFY_REDIRECT_URI
     )
@@ -190,11 +191,12 @@ def spotify_callback(request):
     user.spotify_access_token = token['access_token']
     user.spotify_refresh_token = token['refresh_token']
 
-    # get spotify user id as well
-    sp = spotipy.Spotify(auth=token['access_token'])
-    spotify_user = sp.me()
-    user.spotify_id = spotify_user['id']
-    user.save()
+    # get spotify user id as well if user doesn't have it
+    if not user.spotify_id:
+        sp = spotipy.Spotify(auth=token['access_token'])
+        spotify_user = sp.me()
+        user.spotify_id = spotify_user['id']
+        user.save()
 
     # redirect to index page
     return redirect('%s?%s' % (reverse('home'), 'spotify_login=success'))
