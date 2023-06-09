@@ -38,7 +38,8 @@ def home(request):
             'artist_name': data.get('vehicle_state').get('media_info').get('now_playing_artist', ''),
         })
 
-    tesla.close()
+    # maybe we should keep the connection open?
+    # tesla.close()
 
     # check if user's spotify account is connected, then
     # check if access token is expired, then refresh it.

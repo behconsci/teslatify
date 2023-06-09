@@ -1,5 +1,4 @@
 from django.urls import path
-# logout is a built-in view
 from django.contrib.auth.views import LogoutView
 
 from teslatify.apps.user.views import (
