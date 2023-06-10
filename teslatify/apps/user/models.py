@@ -32,9 +32,9 @@ class User(AbstractUser, Base):
         """ Check if user has active subscription. """
 
         # some friends should be able to use for free, so we don't check if user has active subscription
-        friends = ['doniyor.v.j@gmail.com']
-        if self.username in friends:
-            return True
+        # friends = ['doniyor.v.j@gmail.com']
+        # if self.username in friends:
+        #    return True
 
         # user can't change the email in stripe payment link, so this should be fine.
         customer = Customer.objects.filter(email=self.email).first()
