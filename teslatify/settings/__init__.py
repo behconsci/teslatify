@@ -166,7 +166,7 @@ SPOTIPY_REDIRECT_URI = SPOTIFY_REDIRECT_URI
 
 STRIPE_LIVE_SECRET_KEY = env.str("STRIPE_LIVE_SECRET_KEY", "<your secret key>")
 STRIPE_TEST_SECRET_KEY = env.str("STRIPE_TEST_SECRET_KEY", "<your secret key>")
-STRIPE_LIVE_MODE = False  # Change to True in production
+STRIPE_LIVE_MODE = True  # Change to True in production
 DJSTRIPE_WEBHOOK_SECRET = env.str("DJSTRIPE_WEBHOOK_SECRET", "<your webhook secret key>")
 DJSTRIPE_USE_NATIVE_JSONFIELD = True  # We recommend setting to True for new installations
 DJSTRIPE_FOREIGN_KEY_TO_FIELD = "id"
