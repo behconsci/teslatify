@@ -237,7 +237,7 @@ def add_to_spotify(request):
         teslatify_playlist = sp.user_playlist_create(request.user.spotify_id, 'Teslatify')
 
     # add the song to the playlist
-    song = sp.search(q='artist:' + artist_name + ' track:' + song_title, type='track')
+    song = sp.search(q='artist:' + artist_name + ' track:' + song_title, limit=20)
     if song['tracks']['items']:
         song_uri = song['tracks']['items'][0]['uri']
         # add to playlist only if song is not already in the playlist, by using the song uri
