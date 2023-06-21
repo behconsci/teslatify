@@ -9,4 +9,5 @@ error_log*
 log/*
 htmlcov/*
 .coverage
+.cache
 cache.json
