@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+    <section class="container" style="margin-bottom: 30px">
+
+        <h3 style="float: left">Profile: {{ request.user.username }}</h3>
+        <a href="{% url 'logout' %}" style="float: right" class="small_font">logout</a>
+        <div style="clear: both"></div>
+    </section>
+
+    <section class="nes-container with-title" style="margin-bottom: 40px">
+        <h3 class="title">Spotify Connection</h3>
+        {% if request.user.spotify_id %}
+        <p>
+            Here you can disconnect your Spotify account from this app.
+            This will not delete your account. It will only remove the connection
+            between this app and your Spotify.
+        </p>
+        <p>
+            <a>
+                <button type="button"
+                        onclick="document.getElementById('id-delete-profile').showModal();"
+                        class="nes-btn">
+                    Disconnect from Spotify
+                </button>
+            </a>
+        </p>
+        {% else %}
+        <p>
+            Here you can connect your Spotify account with this app.
+            This will allow you to save songs from your Tesla into your Spotify playlist.
+        </p>
+        <p>
+            <a href="{% url 'spotify_login' %}">
+                <button type="button"
+                        class="nes-btn">
+                    Connect to Spotify
+                    <img src="{% static 'img/Spotify_Icon_RGB_Green.png' %}" width="20">
+                </button>
+            </a>
+        </p>
+        {% endif %}
+    </section>
+
+    <section class="nes-container with-title">
+        <h3 class="title">Danger Zone</h3>
+        <p>
+            Here you can delete your profile. Please note, this action can not be undone
+        </p>
+        <p>
+            <a>
+                <button type="button"
+                        onclick="document.getElementById('id-delete-profile').showModal();"
+                        class="nes-btn is-error">
+                    Delete profile
+                </button>
+            </a>
+        </p>
+    </section>
+
+    <section>
+        <dialog class="nes-dialog" id="id-delete-profile">
+            <p class="title">You are sure, you want to delete your profile?</p>
+            <p>CAUTION: this can't be undone.</p>
+            <form method="post" action="{% url 'delete_profile' %}">
+                <menu class="dialog-menu">
+                    <button class="nes-btn"
+                            onclick="document.getElementById('id-delete-profile').close()"
+                            type="button">Cancel
+                    </button>
+                    {% csrf_token %}
+                    <button class="nes-btn is-error" type="submit">Yes, delete now!</button>
+                </menu>
+            </form>
+        </dialog>
+    </section>
+
+    <section>
+        <dialog class="nes-dialog" id="id-disconnect-spotify">
+            <p class="title">You are sure, you want to disconnect this app from Spotify?</p>
+            <form method="post" action="{% url 'disconnect_spotify' %}">
+                <menu class="dialog-menu">
+                    <button class="nes-btn"
+                            onclick="document.getElementById('id-disconnect-spotify').close()"
+                            type="button">Cancel
+                    </button>
+                    {% csrf_token %}
+                    <button class="nes-btn is-error" type="submit">Yes, disconnect now!</button>
+                </menu>
+            </form>
+        </dialog>
+    </section>
+
+{% endblock %}

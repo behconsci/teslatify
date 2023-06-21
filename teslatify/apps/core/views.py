@@ -24,8 +24,8 @@ def home(request):
     vehicle_data = []
     vehicles = tesla.vehicle_list()
     for vehicle in vehicles:
-        if not vehicle.available():
-            vehicle.sync_wake_up()
+        # no need to wake up the vehicle if it's already awake. It's expensive.
+        # if vehicle is sleeping, then no music is playing anyway.
 
         data = vehicle.get_vehicle_data()
         # turn data to dict
@@ -34,8 +34,8 @@ def home(request):
         vehicle_data.append({
             'display_name': data['display_name'],
             'vehicle_id': data['vehicle_id'],
-            'song_title': data.get('vehicle_state').get('media_info').get('now_playing_title', ''),
-            'artist_name': data.get('vehicle_state').get('media_info').get('now_playing_artist', ''),
+            'song_title': data.get('vehicle_state', {}).get('media_info', {}).get('now_playing_title', ''),
+            'artist_name': data.get('vehicle_state', {}).get('media_info', {}).get('now_playing_artist', ''),
         })
 
     # maybe we should keep the connection open?

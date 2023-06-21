@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block main %}
 
@@ -22,16 +23,19 @@
                         "{{ vehicle.song_title }}" by {{ vehicle.artist_name }}
                     </p>
                 {% else %}
-                    <p>No music in the car :(</p>
+                    <p>No music in the car</p>
                 {% endif %}
                 <br>
-                <button {% if not vehicle.song_title %}class="add-to-spotify nes-btn is-primary is-disabled" disabled{% else %}class="add-to-spotify nes-btn is-primary"{% endif %}>
+                {% if 'vehicle.song_title' %}
+                <button class="add-to-spotify nes-btn is-primary">
                     <input type="hidden" name="spotify_connected" value="{% if request.user.spotify_refresh_token %}1{% endif %}">
                     <input type="hidden" name="vehicle_id" value="{{ vehicle.vehicle_id }}">
                     <input type="hidden" name="song_title" value="{{ vehicle.song_title }}">
                     <input type="hidden" name="artist_name" value="{{ vehicle.artist_name }}">
-                    Add to spotify
+                    Add to Spotify
+                    <img style="vertical-align: initial" src="{% static 'img/Spotify_Icon_RGB_Green.png' %}" width="20">
                 </button>
+                {% endif %}
             </div>
         </section>
         {% endfor %}

@@ -16,6 +16,39 @@ from teslatify.apps.user.models import User
 logger = logging.getLogger(__name__)
 
 
+def profile_page(request):
+    """ it renders the profile page """
+    return render(request, 'profile.html')
+
+
+@login_required
+def delete_profile(request):
+    """ it deletes the user's profile """
+    # delete only if request is coming from this user via POST
+    if request.method == 'POST' and request.user == request.user:
+        request.user.delete()
+        return redirect(reverse('home'))
+
+    return redirect(reverse('profile'))
+
+
+@login_required
+def disconnect_spotify(request):
+    """ it disconnects the user's spotify account """
+    # delete only if request is coming from this user via POST
+    if request.method == 'POST' and request.user == request.user:
+
+        # delete spotify credentials
+        request.user.spotify_id = ''
+        request.user.spotify_access_token = ''
+        request.user.spotify_refresh_token = ''
+        request.user.save()
+
+        return redirect(reverse('profile'))
+
+    return redirect(reverse('profile'))
+
+
 @login_required
 def start_trial_page(request):
     """ it renders the start trial page """

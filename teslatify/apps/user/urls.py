@@ -8,6 +8,10 @@ from teslatify.apps.user.views import (
     tesla_auth,
     tesla_auth_complete,
 
+    profile_page,
+    delete_profile,
+    disconnect_spotify,
+
     spotify_login,
     spotify_callback,
     add_to_spotify
@@ -18,6 +22,11 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     # add start_trial_page
     path('start_trial/', start_trial_page, name='start_trial'),
+
+    # profile page
+    path('profile/', profile_page, name='profile'),
+    path('profile/delete/', delete_profile, name='delete_profile'),
+    path('profile/disconnect_spotify/', disconnect_spotify, name='disconnect_spotify'),
 
     path('trial-started-callback/', trial_started_callback, name='trial_started_callback'),
 

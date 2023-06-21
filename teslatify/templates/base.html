@@ -19,8 +19,8 @@
             font-family: "Press Start 2P";
         }
         .nes-btn.is-primary {
-            color: #400073!important;
-            background-color: #CBF55C!important;
+            color: #000!important;
+            background-color: #fff!important;
         }
         .nes-btn.is-primary::after {
             box-shadow: inset -4px -4px #6d862a!important;
@@ -45,8 +45,9 @@
 
             <div class="social-buttons">
                 {% if request.user.is_authenticated %}
-                    <small>{{ request.user.username }}</small> <br>
-                    <small><a href="{% url 'logout' %}">Logout</a></small>
+                    <small>
+                        <a href="{% url 'profile' %}">{{ request.user.username }}</a>
+                    </small>
                 {% else %}
                     <a href=""><p>Sign in</p></a>
                 {% endif %}
